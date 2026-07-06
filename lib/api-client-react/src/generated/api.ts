@@ -21,6 +21,7 @@ import type {
 
 import type {
   AcceptOrderInput,
+  AccountStatus,
   AuthResponse,
   DriverAccount,
   DriverDocsInput,
@@ -1455,6 +1456,75 @@ export function useGetDriverOrders<TData = Awaited<ReturnType<typeof getDriverOr
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Account Status  —  GET /api/account/:userId/status
+// Used by AccountStatusGate in App.tsx to poll for suspended/banned status.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const getGetAccountStatusUrl = (userId: string) =>
+  `/api/account/${userId}/status`;
+
+/**
+ * @summary Fetch the caller's account status and userType
+ */
+export const getAccountStatus = async (
+  userId: string,
+  options?: RequestInit,
+): Promise<AccountStatus> =>
+  customFetch<AccountStatus>(getGetAccountStatusUrl(userId), {
+    ...options,
+    method: 'GET',
+  });
+
+export const getGetAccountStatusQueryKey = (userId: string) =>
+  [`/api/account/${userId}/status`] as const;
+
+export const getGetAccountStatusQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAccountStatus>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  userId: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof getAccountStatus>>, TError, TData>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAccountStatusQueryKey(userId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccountStatus>>> = ({ signal }) =>
+    getAccountStatus(userId, { signal, ...requestOptions });
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(userId),
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getAccountStatus>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type GetAccountStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getAccountStatus>>>;
+export type GetAccountStatusQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Fetch the caller's account status and userType
+ */
+export function useGetAccountStatus<
+  TData = Awaited<ReturnType<typeof getAccountStatus>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  userId: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof getAccountStatus>>, TError, TData>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAccountStatusQueryOptions(userId, options);
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
   return { ...query, queryKey: queryOptions.queryKey };
 }
 

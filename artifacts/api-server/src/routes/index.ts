@@ -5,15 +5,18 @@
  *  1. Public routers (health probes, all /auth/* endpoints) are registered
  *     FIRST so they are never touched by requireAuth.
  *  2. requireAuth middleware is inserted next.  Every router registered after
- *     this point requires a valid session token + matching X-User-Id header.
- *  3. Protected routers follow.
+ *     this point requires a valid Supabase JWT in the Authorization header.
+ *  3. blockFrozenAccounts runs immediately after requireAuth.  It rejects
+ *     suspended/banned users on all protected routes EXCEPT the allowlisted
+ *     paths (status polling, appeal, support thread) — see middleware file.
+ *  4. Protected routers follow.
  *
- * This means adding a new protected router is a single router.use() call
- * after step 3 — no per-route decoration needed.
+ * Adding a new protected router is a single router.use() call in section 4.
  */
 
 import { Router, type IRouter } from "express";
-import { requireAuth } from "../middlewares/require-auth";
+import { requireAuth }          from "../middlewares/require-auth";
+import { blockFrozenAccounts }  from "../middlewares/block-frozen-accounts";
 
 import healthRouter                                          from "./health";
 import authRouter                                            from "./auth";
@@ -25,6 +28,8 @@ import ratingsRouter                                         from "./ratings";
 import announcementsRouter                                   from "./announcements";
 import locationsRouter                                       from "./locations";
 import { supportPublicRouter, supportProtectedRouter }       from "./support";
+import accountRouter                                         from "./account";
+import appealsRouter                                         from "./appeals";
 
 const router: IRouter = Router();
 
@@ -36,12 +41,17 @@ router.use(adminRouter);          // POST /admin/drivers/:id/approve  etc. (X-Ad
 router.use(supportPublicRouter);  // POST /support/message (public anon) + /support/contact
 
 // ── 2. Session validation gate ────────────────────────────────────────────────
-// All routes registered after this line require a valid Supabase JWT in the
-// Authorization: Bearer header. The JWT is verified cryptographically by
-// requireAuth via supabase.auth.getUser(token).
+// All routes registered after this line require a valid Supabase JWT.
 router.use(requireAuth);
 
-// ── 3. Protected routes ───────────────────────────────────────────────────────
+// ── 3. Account freeze gate ────────────────────────────────────────────────────
+// Rejects suspended/banned users on most protected routes (see allowlist in
+// middlewares/block-frozen-accounts.ts for the exemptions).
+router.use(blockFrozenAccounts);
+
+// ── 4. Protected routes ───────────────────────────────────────────────────────
+router.use(accountRouter);        // GET /account/:userId/status
+router.use(appealsRouter);        // GET /appeal  POST /appeal
 router.use(pushProtectedRouter);  // POST /push/subscribe (auth userId enforced)
 router.use(driverRouter);
 router.use(ordersRouter);

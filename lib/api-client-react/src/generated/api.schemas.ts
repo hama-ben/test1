@@ -212,3 +212,10 @@ export type GetActiveOrdersParams = {
 driverId?: string;
 };
 
+// ── Account status ─────────────────────────────────────────────────────────
+// Returned by GET /api/account/:userId/status
+export interface AccountStatus {
+  accountStatus: string;
+  userType: string;
+}
+

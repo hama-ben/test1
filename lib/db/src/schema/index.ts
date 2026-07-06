@@ -119,14 +119,26 @@ export const userDevicesTable = pgTable("user_devices", {
   lastSeenAt:  timestamp("last_seen_at").notNull().default(sql`now()`),
 });
 
+/**
+ * user_appeals — formerly driver-only but now used for both drivers ("rejected")
+ * and any user type ("banned").
+ *
+ * Table/column names kept as driver_appeals / driver_id to avoid a risky
+ * rename migration while data exists.  The driver_id column stores any user's
+ * id — not exclusively drivers.
+ *
+ * reason: "rejected" | "banned" — set at submission time so the admin panel
+ * can distinguish document-rejection appeals from ban appeals.
+ */
 export const driverAppealsTable = pgTable("driver_appeals", {
   id:            text("id").primaryKey().default(sql`gen_random_uuid()`),
-  driverId:      text("driver_id").notNull(),
+  driverId:      text("driver_id").notNull(), // stores any user's id (driver or consumer)
   message:       text("message").notNull(),
   status:        text("status").notNull().default("pending"),
   adminResponse: text("admin_response"),
   createdAt:     timestamp("created_at").notNull().default(sql`now()`),
   reviewedAt:    timestamp("reviewed_at"),
+  reason:        text("reason"),              // "rejected" | "banned" — nullable for legacy rows
 });
 
 export const pushSubscriptionsTable = pgTable("push_subscriptions", {

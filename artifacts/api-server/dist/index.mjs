@@ -24335,27 +24335,27 @@ var require_router = __commonJS({
     var slice = Array.prototype.slice;
     var flatten = Array.prototype.flat;
     var methods = METHODS.map((method) => method.toLowerCase());
-    module.exports = Router12;
+    module.exports = Router14;
     module.exports.Route = Route;
-    function Router12(options) {
-      if (!(this instanceof Router12)) {
-        return new Router12(options);
+    function Router14(options) {
+      if (!(this instanceof Router14)) {
+        return new Router14(options);
       }
       const opts = options || {};
-      function router10(req, res, next) {
-        router10.handle(req, res, next);
+      function router12(req, res, next) {
+        router12.handle(req, res, next);
       }
-      Object.setPrototypeOf(router10, this);
-      router10.caseSensitive = opts.caseSensitive;
-      router10.mergeParams = opts.mergeParams;
-      router10.params = {};
-      router10.strict = opts.strict;
-      router10.stack = [];
-      return router10;
+      Object.setPrototypeOf(router12, this);
+      router12.caseSensitive = opts.caseSensitive;
+      router12.mergeParams = opts.mergeParams;
+      router12.params = {};
+      router12.strict = opts.strict;
+      router12.stack = [];
+      return router12;
     }
-    Router12.prototype = function() {
+    Router14.prototype = function() {
     };
-    Router12.prototype.param = function param(name, fn) {
+    Router14.prototype.param = function param(name, fn) {
       if (!name) {
         throw new TypeError("argument name is required");
       }
@@ -24375,7 +24375,7 @@ var require_router = __commonJS({
       params.push(fn);
       return this;
     };
-    Router12.prototype.handle = function handle(req, res, callback) {
+    Router14.prototype.handle = function handle(req, res, callback) {
       if (!callback) {
         throw new TypeError("argument callback is required");
       }
@@ -24502,7 +24502,7 @@ var require_router = __commonJS({
         }
       }
     };
-    Router12.prototype.use = function use(handler) {
+    Router14.prototype.use = function use(handler) {
       let offset = 0;
       let path2 = "/";
       if (typeof handler !== "function") {
@@ -24535,7 +24535,7 @@ var require_router = __commonJS({
       }
       return this;
     };
-    Router12.prototype.route = function route(path2) {
+    Router14.prototype.route = function route(path2) {
       const route2 = new Route(path2);
       const layer = new Layer(path2, {
         sensitive: this.caseSensitive,
@@ -24550,7 +24550,7 @@ var require_router = __commonJS({
       return route2;
     };
     methods.concat("all").forEach(function(method) {
-      Router12.prototype[method] = function(path2) {
+      Router14.prototype[method] = function(path2) {
         const route = this.route(path2);
         route[method].apply(route, slice.call(arguments, 1));
         return this;
@@ -24733,13 +24733,13 @@ var require_application = __commonJS({
     var compileTrust = require_utils3().compileTrust;
     var resolve = __require("node:path").resolve;
     var once = require_once();
-    var Router12 = require_router();
+    var Router14 = require_router();
     var slice = Array.prototype.slice;
     var flatten = Array.prototype.flat;
     var app2 = exports = module.exports = {};
     var trustProxyDefaultSymbol = "@@symbol:trust_proxy_default";
     app2.init = function init2() {
-      var router10 = null;
+      var router12 = null;
       this.cache = /* @__PURE__ */ Object.create(null);
       this.engines = /* @__PURE__ */ Object.create(null);
       this.settings = /* @__PURE__ */ Object.create(null);
@@ -24748,13 +24748,13 @@ var require_application = __commonJS({
         configurable: true,
         enumerable: true,
         get: function getrouter() {
-          if (router10 === null) {
-            router10 = new Router12({
+          if (router12 === null) {
+            router12 = new Router14({
               caseSensitive: this.enabled("case sensitive routing"),
               strict: this.enabled("strict routing")
             });
           }
-          return router10;
+          return router12;
         }
       });
     };
@@ -24825,15 +24825,15 @@ var require_application = __commonJS({
       if (fns.length === 0) {
         throw new TypeError("app.use() requires a middleware function");
       }
-      var router10 = this.router;
+      var router12 = this.router;
       fns.forEach(function(fn2) {
         if (!fn2 || !fn2.handle || !fn2.set) {
-          return router10.use(path2, fn2);
+          return router12.use(path2, fn2);
         }
         debug(".use app under %s", path2);
         fn2.mountpath = path2;
         fn2.parent = this;
-        router10.use(path2, function mounted_app(req, res, next) {
+        router12.use(path2, function mounted_app(req, res, next) {
           var orig = req.app;
           fn2.handle(req, res, function(err) {
             Object.setPrototypeOf(req, orig.request);
@@ -27406,7 +27406,7 @@ var require_express = __commonJS({
     var EventEmitter = __require("node:events").EventEmitter;
     var mixin = require_merge_descriptors();
     var proto = require_application();
-    var Router12 = require_router();
+    var Router14 = require_router();
     var req = require_request();
     var res = require_response();
     exports = module.exports = createApplication;
@@ -27428,8 +27428,8 @@ var require_express = __commonJS({
     exports.application = proto;
     exports.request = req;
     exports.response = res;
-    exports.Route = Router12.Route;
-    exports.Router = Router12;
+    exports.Route = Router14.Route;
+    exports.Router = Router14;
     exports.json = bodyParser.json;
     exports.raw = bodyParser.raw;
     exports.static = require_serve_static();
@@ -84913,14 +84913,14 @@ var wrapper_default = import_websocket.default;
 import { createServer } from "http";
 
 // src/app.ts
-var import_express12 = __toESM(require_express2(), 1);
+var import_express14 = __toESM(require_express2(), 1);
 var import_cors = __toESM(require_lib3(), 1);
 var import_pino_http = __toESM(require_logger(), 1);
 import path from "path";
 import { fileURLToPath } from "url";
 
 // src/routes/index.ts
-var import_express11 = __toESM(require_express2(), 1);
+var import_express13 = __toESM(require_express2(), 1);
 
 // ../../node_modules/.pnpm/drizzle-orm@0.45.2_@types+pg@8.20.0_pg@8.22.0/node_modules/drizzle-orm/entity.js
 var entityKind = /* @__PURE__ */ Symbol.for("drizzle:entityKind");
@@ -92017,11 +92017,14 @@ var userDevicesTable = pgTable("user_devices", {
 var driverAppealsTable = pgTable("driver_appeals", {
   id: text("id").primaryKey().default(sql`gen_random_uuid()`),
   driverId: text("driver_id").notNull(),
+  // stores any user's id (driver or consumer)
   message: text("message").notNull(),
   status: text("status").notNull().default("pending"),
   adminResponse: text("admin_response"),
   createdAt: timestamp("created_at").notNull().default(sql`now()`),
-  reviewedAt: timestamp("reviewed_at")
+  reviewedAt: timestamp("reviewed_at"),
+  reason: text("reason")
+  // "rejected" | "banned" — nullable for legacy rows
 });
 var pushSubscriptionsTable = pgTable("push_subscriptions", {
   id: text("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -101259,6 +101262,62 @@ async function requireAuth(req, res, next) {
   }
 }
 
+// src/middlewares/block-frozen-accounts.ts
+var CACHE_TTL_MS = 1e4;
+var statusCache = /* @__PURE__ */ new Map();
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of statusCache) {
+    if (v.expiresAt < now) statusCache.delete(k);
+  }
+}, 6e4).unref();
+function invalidateAccountStatusCache(userId) {
+  statusCache.delete(userId);
+}
+async function fetchAccountStatus(userId) {
+  const cached = statusCache.get(userId);
+  if (cached && cached.expiresAt > Date.now()) return cached.status;
+  const [user] = await db.select({ accountStatus: usersTable.accountStatus }).from(usersTable).where(eq(usersTable.id, userId));
+  if (!user) return null;
+  statusCache.set(userId, { status: user.accountStatus, expiresAt: Date.now() + CACHE_TTL_MS });
+  return user.accountStatus;
+}
+function isFreezeAllowlisted(req) {
+  const p = req.path;
+  if (req.method === "GET" && /^\/account\/[^/]+\/status$/.test(p)) return true;
+  if (p === "/appeal") return true;
+  if (p === "/support/thread" || p === "/support/thread/send") return true;
+  return false;
+}
+async function blockFrozenAccounts(req, res, next) {
+  const userId = req.auth?.userId;
+  if (!userId || isFreezeAllowlisted(req)) {
+    next();
+    return;
+  }
+  try {
+    const status = await fetchAccountStatus(userId);
+    if (status === "suspended") {
+      res.status(403).json({
+        error: "\u062D\u0633\u0627\u0628\u0643 \u0645\u0648\u0642\u0648\u0641 \u0645\u0624\u0642\u062A\u0627\u064B. \u062A\u0648\u0627\u0635\u0644 \u0645\u0639 \u0627\u0644\u062F\u0639\u0645 \u0627\u0644\u0641\u0646\u064A \u0644\u0645\u0639\u0631\u0641\u0629 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644.",
+        code: "ACCOUNT_SUSPENDED"
+      });
+      return;
+    }
+    if (status === "banned") {
+      res.status(403).json({
+        error: "\u062D\u0633\u0627\u0628\u0643 \u0645\u062D\u0638\u0648\u0631. \u064A\u0645\u0643\u0646\u0643 \u062A\u0642\u062F\u064A\u0645 \u0637\u0639\u0646 \u0644\u0644\u0645\u0631\u0627\u062C\u0639\u0629 \u0645\u0646 \u062F\u0627\u062E\u0644 \u0627\u0644\u062A\u0637\u0628\u064A\u0642.",
+        code: "ACCOUNT_BANNED"
+      });
+      return;
+    }
+    next();
+  } catch (err) {
+    logger.error({ err, userId }, "blockFrozenAccounts: status lookup failed \u2014 failing open");
+    next();
+  }
+}
+
 // src/routes/health.ts
 var import_express = __toESM(require_express2(), 1);
 
@@ -106674,6 +106733,58 @@ router3.post("/admin/support/threads/:userId/reply", async (req, res) => {
     res.status(500).json({ error: "\u062A\u0639\u0630\u0651\u0631 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0631\u062F" });
   }
 });
+async function setUserAccountStatus(userId, newStatus) {
+  const result = await db.update(usersTable).set({ accountStatus: newStatus }).where(eq(usersTable.id, userId));
+  return (result.rowCount ?? 0) > 0;
+}
+router3.patch("/admin/users/:userId/suspend", async (req, res) => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "suspended");
+  if (!found) {
+    res.status(404).json({ error: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    return;
+  }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "suspended" });
+  req.log.info({ userId }, "Admin: user suspended");
+  res.json({ ok: true, accountStatus: "suspended" });
+});
+router3.patch("/admin/users/:userId/unsuspend", async (req, res) => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "approved");
+  if (!found) {
+    res.status(404).json({ error: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    return;
+  }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "approved" });
+  req.log.info({ userId }, "Admin: user unsuspended");
+  res.json({ ok: true, accountStatus: "approved" });
+});
+router3.patch("/admin/users/:userId/ban", async (req, res) => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "banned");
+  if (!found) {
+    res.status(404).json({ error: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    return;
+  }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "banned" });
+  req.log.info({ userId }, "Admin: user banned");
+  res.json({ ok: true, accountStatus: "banned" });
+});
+router3.patch("/admin/users/:userId/unban", async (req, res) => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "approved");
+  if (!found) {
+    res.status(404).json({ error: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    return;
+  }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "approved" });
+  req.log.info({ userId }, "Admin: user unbanned");
+  res.json({ ok: true, accountStatus: "approved" });
+});
 var admin_default = router3;
 
 // src/routes/driver.ts
@@ -107005,42 +107116,8 @@ router4.post("/driver/:driverId/free-trial", async (req, res) => {
   req.log.info({ driverId, expiresAt }, "Free trial granted");
   res.json({ subscriptionExpiresAt: expiresAt.toISOString(), trial: true });
 });
-router4.get("/driver/appeal", async (req, res) => {
-  const driverId = req.auth?.userId;
-  if (!driverId) {
-    res.status(401).json({ error: "\u063A\u064A\u0631 \u0645\u0635\u0631\u062D" });
-    return;
-  }
-  const [appeal] = await db.select({
-    id: driverAppealsTable.id,
-    status: driverAppealsTable.status,
-    message: driverAppealsTable.message,
-    adminResponse: driverAppealsTable.adminResponse,
-    createdAt: driverAppealsTable.createdAt,
-    reviewedAt: driverAppealsTable.reviewedAt
-  }).from(driverAppealsTable).where(eq(driverAppealsTable.driverId, driverId)).orderBy(desc(driverAppealsTable.createdAt)).limit(1);
-  res.json(appeal ?? null);
-});
-router4.post("/driver/appeal", async (req, res) => {
-  const driverId = req.auth?.userId;
-  if (!driverId) {
-    res.status(401).json({ error: "\u063A\u064A\u0631 \u0645\u0635\u0631\u062D" });
-    return;
-  }
-  const { message } = req.body;
-  if (!message?.trim()) {
-    res.status(400).json({ error: "\u0646\u0635 \u0627\u0644\u0637\u0639\u0646 \u0645\u0637\u0644\u0648\u0628" });
-    return;
-  }
-  const [existing] = await db.select({ id: driverAppealsTable.id, status: driverAppealsTable.status }).from(driverAppealsTable).where(eq(driverAppealsTable.driverId, driverId)).orderBy(desc(driverAppealsTable.createdAt)).limit(1);
-  if (existing?.status === "pending") {
-    res.status(409).json({ error: "\u0644\u062F\u064A\u0643 \u0637\u0639\u0646 \u0642\u064A\u062F \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629 \u0628\u0627\u0644\u0641\u0639\u0644" });
-    return;
-  }
-  const [inserted] = await db.insert(driverAppealsTable).values({ driverId, message: message.trim(), status: "pending" }).returning();
-  req.log.info({ driverId, appealId: inserted.id }, "Driver appeal submitted");
-  res.status(201).json({ id: inserted.id, status: "pending" });
-});
+router4.get("/driver/appeal", (req, res) => res.redirect(307, "/appeal"));
+router4.post("/driver/appeal", (req, res) => res.redirect(307, "/appeal"));
 var driver_default = router4;
 
 // src/routes/orders.ts
@@ -107722,22 +107799,107 @@ protectedRouter.post("/support/thread/send", async (req, res) => {
   }
 });
 
-// src/routes/index.ts
+// src/routes/account.ts
+var import_express11 = __toESM(require_express2(), 1);
 var router9 = (0, import_express11.Router)();
-router9.use(health_default);
-router9.use(auth_default);
-router9.use(pushPublicRouter);
-router9.use(admin_default);
-router9.use(publicRouter);
-router9.use(requireAuth);
-router9.use(pushProtectedRouter);
-router9.use(driver_default);
-router9.use(orders_default);
-router9.use(ratings_default);
-router9.use(announcements_default);
-router9.use(locations_default);
-router9.use(protectedRouter);
-var routes_default = router9;
+router9.get("/account/:userId/status", async (req, res) => {
+  const callerId = req.auth?.userId;
+  if (!callerId) {
+    res.status(401).json({ error: "\u063A\u064A\u0631 \u0645\u0635\u0631\u062D" });
+    return;
+  }
+  if (callerId !== req.params.userId) {
+    res.status(403).json({ error: "\u0644\u0627 \u064A\u0645\u0643\u0646\u0643 \u0627\u0644\u0627\u0637\u0644\u0627\u0639 \u0639\u0644\u0649 \u062D\u0627\u0644\u0629 \u062D\u0633\u0627\u0628 \u0645\u0633\u062A\u062E\u062F\u0645 \u0622\u062E\u0631" });
+    return;
+  }
+  const [user] = await db.select({ accountStatus: usersTable.accountStatus, userType: usersTable.userType }).from(usersTable).where(eq(usersTable.id, callerId));
+  if (!user) {
+    res.status(404).json({ error: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    return;
+  }
+  res.json({ accountStatus: user.accountStatus, userType: user.userType });
+});
+var account_default = router9;
+
+// src/routes/appeals.ts
+var import_express12 = __toESM(require_express2(), 1);
+var router10 = (0, import_express12.Router)();
+var APPEALABLE_STATUSES = /* @__PURE__ */ new Set(["rejected", "banned"]);
+router10.get("/appeal", async (req, res) => {
+  const userId = req.auth?.userId;
+  if (!userId) {
+    res.status(401).json({ error: "\u063A\u064A\u0631 \u0645\u0635\u0631\u062D" });
+    return;
+  }
+  const [appeal] = await db.select({
+    id: driverAppealsTable.id,
+    status: driverAppealsTable.status,
+    message: driverAppealsTable.message,
+    adminResponse: driverAppealsTable.adminResponse,
+    createdAt: driverAppealsTable.createdAt,
+    reviewedAt: driverAppealsTable.reviewedAt,
+    reason: driverAppealsTable.reason
+  }).from(driverAppealsTable).where(eq(driverAppealsTable.driverId, userId)).orderBy(desc(driverAppealsTable.createdAt)).limit(1);
+  res.json(appeal ?? null);
+});
+router10.post("/appeal", async (req, res) => {
+  const userId = req.auth?.userId;
+  if (!userId) {
+    res.status(401).json({ error: "\u063A\u064A\u0631 \u0645\u0635\u0631\u062D" });
+    return;
+  }
+  const { message } = req.body;
+  if (!message?.trim()) {
+    res.status(400).json({ error: "\u0646\u0635 \u0627\u0644\u0637\u0639\u0646 \u0645\u0637\u0644\u0648\u0628" });
+    return;
+  }
+  const [user] = await db.select({ accountStatus: usersTable.accountStatus }).from(usersTable).where(eq(usersTable.id, userId));
+  if (!user) {
+    res.status(404).json({ error: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    return;
+  }
+  if (!APPEALABLE_STATUSES.has(user.accountStatus)) {
+    res.status(400).json({
+      error: "\u0644\u0627 \u064A\u0645\u0643\u0646 \u062A\u0642\u062F\u064A\u0645 \u0637\u0639\u0646 \u0641\u064A \u0627\u0644\u0648\u0636\u0639 \u0627\u0644\u062D\u0627\u0644\u064A \u0644\u062D\u0633\u0627\u0628\u0643"
+    });
+    return;
+  }
+  const [existing] = await db.select({ id: driverAppealsTable.id, status: driverAppealsTable.status }).from(driverAppealsTable).where(eq(driverAppealsTable.driverId, userId)).orderBy(desc(driverAppealsTable.createdAt)).limit(1);
+  if (existing?.status === "pending") {
+    res.status(409).json({ error: "\u0644\u062F\u064A\u0643 \u0637\u0639\u0646 \u0642\u064A\u062F \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629 \u0628\u0627\u0644\u0641\u0639\u0644" });
+    return;
+  }
+  const [inserted] = await db.insert(driverAppealsTable).values({
+    driverId: userId,
+    message: message.trim(),
+    status: "pending",
+    reason: user.accountStatus
+    // "rejected" | "banned"
+  }).returning();
+  logger.info({ userId, appealId: inserted.id, reason: user.accountStatus }, "User appeal submitted");
+  res.status(201).json({ id: inserted.id, status: "pending" });
+});
+var appeals_default = router10;
+
+// src/routes/index.ts
+var router11 = (0, import_express13.Router)();
+router11.use(health_default);
+router11.use(auth_default);
+router11.use(pushPublicRouter);
+router11.use(admin_default);
+router11.use(publicRouter);
+router11.use(requireAuth);
+router11.use(blockFrozenAccounts);
+router11.use(account_default);
+router11.use(appeals_default);
+router11.use(pushProtectedRouter);
+router11.use(driver_default);
+router11.use(orders_default);
+router11.use(ratings_default);
+router11.use(announcements_default);
+router11.use(locations_default);
+router11.use(protectedRouter);
+var routes_default = router11;
 
 // ../../node_modules/.pnpm/express-rate-limit@8.5.2_express@5.2.1/node_modules/express-rate-limit/dist/index.mjs
 var import_ip_address = __toESM(require_ip_address(), 1);
@@ -108729,7 +108891,7 @@ function authRateLimiter(req, res, next) {
 }
 
 // src/app.ts
-var app = (0, import_express12.default)();
+var app = (0, import_express14.default)();
 app.set("trust proxy", 1);
 app.use(
   (0, import_pino_http.default)({
@@ -108751,14 +108913,14 @@ app.use(
   })
 );
 app.use((0, import_cors.default)({ origin: true, credentials: true }));
-app.use(import_express12.default.json({ limit: "10mb" }));
-app.use(import_express12.default.urlencoded({ extended: true, limit: "10mb" }));
+app.use(import_express14.default.json({ limit: "10mb" }));
+app.use(import_express14.default.urlencoded({ extended: true, limit: "10mb" }));
 app.use("/api/auth", authRateLimiter);
 app.use("/api", routes_default);
 if (process.env.NODE_ENV === "production") {
   const __dirname2 = path.dirname(fileURLToPath(import.meta.url));
   const frontendDist = path.resolve(__dirname2, "../../talabati/dist/public");
-  app.use(import_express12.default.static(frontendDist));
+  app.use(import_express14.default.static(frontendDist));
   app.get("*splat", (_req, res) => {
     res.sendFile(path.join(frontendDist, "index.html"));
   });
@@ -109085,6 +109247,11 @@ DO $dl_upd$ BEGIN
       WITH CHECK (auth.uid()::text = driver_id);
   END IF;
 END $dl_upd$;
+
+-- \u2500\u2500 Step 1 \u2014 Generalise driver_appeals for any user type \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+-- Add reason column (nullable \u2014 legacy rows have NULL, new rows store
+-- "rejected" or "banned" set at submission time by the appeals route).
+ALTER TABLE "driver_appeals" ADD COLUMN IF NOT EXISTS "reason" text;
 
 -- \u2500\u2500 Additive column migrations (always safe to re-run) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 

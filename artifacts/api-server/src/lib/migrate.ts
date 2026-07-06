@@ -325,6 +325,11 @@ DO $dl_upd$ BEGIN
   END IF;
 END $dl_upd$;
 
+-- ── Step 1 — Generalise driver_appeals for any user type ────────────────────
+-- Add reason column (nullable — legacy rows have NULL, new rows store
+-- "rejected" or "banned" set at submission time by the appeals route).
+ALTER TABLE "driver_appeals" ADD COLUMN IF NOT EXISTS "reason" text;
+
 -- ── Additive column migrations (always safe to re-run) ─────────────────────
 
 ALTER TABLE "ratings"        ADD COLUMN IF NOT EXISTS "comment" text;

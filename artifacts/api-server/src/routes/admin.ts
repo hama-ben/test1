@@ -23,6 +23,7 @@ import {
 import { getSupabaseAdmin } from "../lib/supabase-server";
 import { emitToUser } from "../lib/socket-server";
 import { sendPushToUser } from "../lib/web-push";
+import { invalidateAccountStatusCache } from "../middlewares/block-frozen-accounts";
 
 const router: IRouter = Router();
 
@@ -635,6 +636,75 @@ router.post("/admin/support/threads/:userId/reply", async (req, res): Promise<vo
     req.log.error({ err }, "admin/support/threads/:userId/reply: DB insert failed");
     res.status(500).json({ error: "تعذّر إرسال الرد" });
   }
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// USER FREEZE / UNFREEZE (suspend · ban · unsuspend · unban)
+// ═══════════════════════════════════════════════════════════════════════
+//
+// These four PATCH endpoints are the single source of truth for toggling
+// account_status to "suspended" or "banned" and back to "approved".
+// After every successful DB write:
+//   1. The blockFrozenAccounts status cache is instantly invalidated so
+//      the next request by that user performs a fresh DB lookup.
+//   2. emitToUser() fires an "account_status_changed" socket event to the
+//      user's private room so an open app freezes/unfreezes in < 1 s.
+//
+// Protected by requireAdmin — X-Admin-Key must match ADMIN_API_KEY.
+
+async function setUserAccountStatus(
+  userId: string,
+  newStatus: string
+): Promise<boolean> {
+  const result = await db
+    .update(usersTable)
+    .set({ accountStatus: newStatus })
+    .where(eq(usersTable.id, userId));
+  return (result.rowCount ?? 0) > 0;
+}
+
+// PATCH /admin/users/:userId/suspend — approved → suspended
+router.patch("/admin/users/:userId/suspend", async (req, res): Promise<void> => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "suspended");
+  if (!found) { res.status(404).json({ error: "المستخدم غير موجود" }); return; }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "suspended" });
+  req.log.info({ userId }, "Admin: user suspended");
+  res.json({ ok: true, accountStatus: "suspended" });
+});
+
+// PATCH /admin/users/:userId/unsuspend — suspended → approved
+router.patch("/admin/users/:userId/unsuspend", async (req, res): Promise<void> => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "approved");
+  if (!found) { res.status(404).json({ error: "المستخدم غير موجود" }); return; }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "approved" });
+  req.log.info({ userId }, "Admin: user unsuspended");
+  res.json({ ok: true, accountStatus: "approved" });
+});
+
+// PATCH /admin/users/:userId/ban — any status → banned
+router.patch("/admin/users/:userId/ban", async (req, res): Promise<void> => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "banned");
+  if (!found) { res.status(404).json({ error: "المستخدم غير موجود" }); return; }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "banned" });
+  req.log.info({ userId }, "Admin: user banned");
+  res.json({ ok: true, accountStatus: "banned" });
+});
+
+// PATCH /admin/users/:userId/unban — banned → approved
+router.patch("/admin/users/:userId/unban", async (req, res): Promise<void> => {
+  const { userId } = req.params;
+  const found = await setUserAccountStatus(userId, "approved");
+  if (!found) { res.status(404).json({ error: "المستخدم غير موجود" }); return; }
+  invalidateAccountStatusCache(userId);
+  emitToUser(userId, "account_status_changed", { accountStatus: "approved" });
+  req.log.info({ userId }, "Admin: user unbanned");
+  res.json({ ok: true, accountStatus: "approved" });
 });
 
 export default router;

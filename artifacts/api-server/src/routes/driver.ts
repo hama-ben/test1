@@ -543,62 +543,11 @@ router.post("/driver/:driverId/free-trial", async (req, res): Promise<void> => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// GET /driver/appeal — fetch current appeal for the logged-in driver
+// /driver/appeal — REMOVED (moved to /appeal in routes/appeals.ts)
+// Kept as thin redirects for the 30-day grace period in case any older
+// version of the app still calls the old URL.
 // ─────────────────────────────────────────────────────────────────────────────
-router.get("/driver/appeal", async (req, res): Promise<void> => {
-  const driverId = req.auth?.userId;
-  if (!driverId) { res.status(401).json({ error: "غير مصرح" }); return; }
-
-  const [appeal] = await db
-    .select({
-      id:            driverAppealsTable.id,
-      status:        driverAppealsTable.status,
-      message:       driverAppealsTable.message,
-      adminResponse: driverAppealsTable.adminResponse,
-      createdAt:     driverAppealsTable.createdAt,
-      reviewedAt:    driverAppealsTable.reviewedAt,
-    })
-    .from(driverAppealsTable)
-    .where(eq(driverAppealsTable.driverId, driverId))
-    .orderBy(desc(driverAppealsTable.createdAt))
-    .limit(1);
-
-  res.json(appeal ?? null);
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// POST /driver/appeal — submit an appeal (one active appeal per driver)
-// ─────────────────────────────────────────────────────────────────────────────
-router.post("/driver/appeal", async (req, res): Promise<void> => {
-  const driverId = req.auth?.userId;
-  if (!driverId) { res.status(401).json({ error: "غير مصرح" }); return; }
-
-  const { message } = req.body as { message?: string };
-  if (!message?.trim()) {
-    res.status(400).json({ error: "نص الطعن مطلوب" });
-    return;
-  }
-
-  // Prevent spamming: if a pending appeal already exists, reject
-  const [existing] = await db
-    .select({ id: driverAppealsTable.id, status: driverAppealsTable.status })
-    .from(driverAppealsTable)
-    .where(eq(driverAppealsTable.driverId, driverId))
-    .orderBy(desc(driverAppealsTable.createdAt))
-    .limit(1);
-
-  if (existing?.status === "pending") {
-    res.status(409).json({ error: "لديك طعن قيد المراجعة بالفعل" });
-    return;
-  }
-
-  const [inserted] = await db
-    .insert(driverAppealsTable)
-    .values({ driverId, message: message.trim(), status: "pending" })
-    .returning();
-
-  req.log.info({ driverId, appealId: inserted.id }, "Driver appeal submitted");
-  res.status(201).json({ id: inserted.id, status: "pending" });
-});
+router.get("/driver/appeal", (req, res) => res.redirect(307, "/appeal"));
+router.post("/driver/appeal", (req, res) => res.redirect(307, "/appeal"));
 
 export default router;
