@@ -1,0 +1,1 @@
+- [React Query duplicate instance in pnpm workspace](react-query-duplicate-instance.md) — workspace lib deps (not peerDeps) get their own local copy; Vite uses a different QueryClientContext → "No QueryClient set".

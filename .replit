@@ -1,0 +1,33 @@
+modules = ["nodejs-20", "web", "java-graalvm22.3", "postgresql-16"]
+
+[deployment]
+router = "application"
+deploymentTarget = "autoscale"
+
+[deployment.postBuild]
+args = ["pnpm", "store", "prune"]
+env = { "CI" = "true" }
+
+[workflows]
+runButton = "Project"
+
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
+
+[userenv]
+
+[userenv.shared]
+SUPABASE_URL = "https://aeoyteruvcxqimwusrey.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlb3l0ZXJ1dmN4cWltd3VzcmV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MjM3ODUsImV4cCI6MjA5NTk5OTc4NX0.vi9Chq9WgzSKEKz50EHJyaKnPtBRi1MvIjdtlePJHH8"
+SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlb3l0ZXJ1dmN4cWltd3VzcmV5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDQyMzc4NSwiZXhwIjoyMDk1OTk5Nzg1fQ.HO3XM8toqKFl1H1uyNrNhHPwurluTvLu2V7vo7fQS-8"
+SUPABASE_DB_URL = "postgresql://postgres.aeoyteruvcxqimwusrey:hama123hama@aws-0-eu-west-1.pooler.supabase.com:5432/postgres"
+ADMIN_EMAIL = "waterdrive213@gmail.com"
+SMTP_PASS = "ueozopodgygmaels"
+
+[nix]
+channel = "stable-25_05"
