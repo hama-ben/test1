@@ -27,7 +27,7 @@ import {
   Package, Truck, CheckCircle2, User, Phone, MapPin,
   Loader2, PlayCircle, PauseCircle, XCircle, Bell, Coffee, Timer,
   CreditCard, Clock, ShieldAlert, CalendarDays, AlertTriangle,
-  HeadphonesIcon, ExternalLink, MessageSquare, Send, CheckCheck,
+  HeadphonesIcon, ExternalLink, MessageSquare, Send, CheckCheck, Ban, Lock,
 } from "lucide-react";
 import { format } from "date-fns";
 import type { DriverStatusInputCurrentStatus } from "@workspace/api-client-react";
@@ -71,6 +71,64 @@ function PendingAccountOverlay() {
           <Clock className="w-4 h-4 animate-pulse" />
           <span className="text-sm font-medium">يتم التحقق تلقائياً عند القبول</span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Blocking overlay — Account suspended by admin
+// ─────────────────────────────────────────────────────────────────────────────
+function SuspendedAccountOverlay() {
+  const openSupport = useSupportChatStore((s) => s.open);
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 mx-4 max-w-sm w-full shadow-2xl border border-slate-200 dark:border-slate-600 text-center animate-in zoom-in-95 duration-300" dir="rtl">
+        <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-5">
+          <Lock className="w-10 h-10 text-slate-500 dark:text-slate-400" />
+        </div>
+        <h2 className="text-xl font-black text-slate-800 dark:text-white mb-4">الحساب موقوف مؤقتاً</h2>
+        <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 rounded-2xl p-4 text-right mb-6">
+          <p className="text-slate-700 dark:text-slate-200 text-sm leading-loose">
+            تم إيقاف حسابك مؤقتاً من قِبل الإدارة. لن تتلقى أي طلبيات حتى تتم إعادة تفعيل حسابك. يرجى التواصل مع الدعم للمزيد من التفاصيل.
+          </p>
+        </div>
+        <button
+          onClick={openSupport}
+          className="w-full inline-flex items-center justify-center gap-2 bg-slate-700 dark:bg-slate-600 text-white font-bold py-3 rounded-2xl shadow-lg hover:bg-slate-800 dark:hover:bg-slate-500 transition-all active:scale-[0.98] text-sm"
+        >
+          <HeadphonesIcon className="w-4 h-4" />
+          تواصل مع الدعم
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Blocking overlay — Account permanently banned by admin
+// ─────────────────────────────────────────────────────────────────────────────
+function BannedAccountOverlay() {
+  const openSupport = useSupportChatStore((s) => s.open);
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 mx-4 max-w-sm w-full shadow-2xl border border-red-200 dark:border-red-700 text-center animate-in zoom-in-95 duration-300" dir="rtl">
+        <div className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-5">
+          <Ban className="w-10 h-10 text-red-500" />
+        </div>
+        <h2 className="text-xl font-black text-slate-800 dark:text-white mb-4">تم حظر هذا الحساب</h2>
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-2xl p-4 text-right mb-6">
+          <p className="text-slate-700 dark:text-slate-200 text-sm leading-loose">
+            تم حظر حسابك بشكل دائم بسبب انتهاك قواعد المنصة. لن تتمكن من الوصول إلى التطبيق أو استقبال الطلبيات. للاستفسار يرجى التواصل مع الدعم.
+          </p>
+        </div>
+        <button
+          onClick={openSupport}
+          className="w-full inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-3 rounded-2xl shadow-lg shadow-red-600/20 hover:bg-red-700 transition-all active:scale-[0.98] text-sm"
+        >
+          <HeadphonesIcon className="w-4 h-4" />
+          تواصل مع الدعم
+        </button>
       </div>
     </div>
   );
@@ -283,8 +341,10 @@ function DriverDashboardContent({ driverId }: { driverId: string }) {
 
   useEffect(() => {
     if (account === undefined) return;
-    // Rejected drivers stay on this page — the overlay is the only UI they see.
-    if ((account as any).accountStatus === "rejected") return;
+    // Banned / suspended / rejected drivers stay on this page — the overlay is
+    // the only UI they see. None of these should be redirected elsewhere.
+    const blockedStatus = ["banned", "suspended", "rejected"];
+    if (blockedStatus.includes((account as any).accountStatus)) return;
     const isLegacy = (account as any).isLegacyDriver === true;
     const hasDocs  = (account as any).documentsUploaded === true;
     if (!isLegacy && !hasDocs) {
@@ -339,9 +399,12 @@ function DriverDashboardContent({ driverId }: { driverId: string }) {
     }
   };
 
-  const isRejected = (account as any)?.accountStatus === "rejected";
-  const isPending  = !isRejected && account?.accountStatus === "pending";
-  const isExpired  = account?.subscriptionExpired === true;
+  // Priority order (highest → lowest): banned → suspended → rejected → pending → expired/grace
+  const isBanned    = (account as any)?.accountStatus === "banned";
+  const isSuspended = !isBanned && (account as any)?.accountStatus === "suspended";
+  const isRejected  = !isBanned && !isSuspended && (account as any)?.accountStatus === "rejected";
+  const isPending   = !isBanned && !isSuspended && !isRejected && account?.accountStatus === "pending";
+  const isExpired   = account?.subscriptionExpired === true;
   // True only when the real balance is expired but a receipt is pending
   // admin review — this NEVER reflects a real day added to the balance.
   const isGraceActive = !isExpired && (account as any)?.pendingReceiptGraceActive === true;
@@ -349,12 +412,24 @@ function DriverDashboardContent({ driverId }: { driverId: string }) {
   const { name, userType } = useAuth();
   const openSupport = useSupportChatStore((s) => s.open);
 
+  // While account status is not yet known, show a loader so a banned/suspended
+  // driver never sees even a flash of normal dashboard content.
+  if (account === undefined) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <>
+      {isBanned && <BannedAccountOverlay />}
+      {isSuspended && <SuspendedAccountOverlay />}
       {isRejected && <RejectedAccountOverlay />}
-      {!isRejected && isPending && <PendingAccountOverlay />}
-      {!isRejected && !isPending && isExpired && <ExpiredSubscriptionOverlay />}
-      {!isRejected && !isPending && isGraceActive && (
+      {!isBanned && !isSuspended && isPending && <PendingAccountOverlay />}
+      {!isBanned && !isSuspended && !isRejected && !isPending && isExpired && <ExpiredSubscriptionOverlay />}
+      {!isBanned && !isSuspended && !isRejected && !isPending && isGraceActive && (
         <div className="mx-4 mt-4 glass-panel rounded-2xl p-4 border-2 border-amber-300/60 bg-amber-50/70 dark:bg-amber-900/20 flex items-start gap-3">
           <Timer className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
           <p className="text-sm text-amber-800 dark:text-amber-300 leading-relaxed">

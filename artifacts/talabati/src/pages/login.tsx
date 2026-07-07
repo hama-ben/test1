@@ -15,7 +15,7 @@ type ForgotStep = "email" | "otp" | "reset" | "done";
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { userId, userType, setAuth } = useAuth();
+  const { userId, userType, setAuth, logout } = useAuth();
   const { t } = useTranslation();
 
   const [email, setEmail] = useState("");
@@ -42,6 +42,46 @@ export default function Login() {
   const [forgotError, setForgotError] = useState("");
 
   const loginMutation = useLogin();
+
+  // ── Account-status gate (drivers only) ────────────────────────────────────
+  // Prevents the useEffect auto-redirect from firing while the async status
+  // check is in flight, so a banned/suspended driver never briefly navigates
+  // to /driver-dashboard before being bounced back.
+  const [checkingDriverStatus, setCheckingDriverStatus] = useState(false);
+
+  // Called after setAuth() succeeds so customFetch has the Bearer token.
+  // Non-driver accounts skip the check and go straight to their dashboard.
+  // Structured as a plain async function so it's trivially extendable to
+  // consumer accounts later by removing the userType guard.
+  const navigateAfterLogin = async (userId: string, userType: string) => {
+    if (userType !== "سائق") {
+      setLocation("/dashboard");
+      return;
+    }
+    setCheckingDriverStatus(true);
+    try {
+      const account = await customFetch<{ accountStatus: string }>(
+        `/api/driver/${userId}/account`
+      );
+      const status = account?.accountStatus;
+      if (status === "banned") {
+        logout();
+        setError("تم حظر هذا الحساب بشكل دائم بسبب انتهاك قواعد المنصة. يرجى التواصل مع الدعم.");
+        return;
+      }
+      if (status === "suspended") {
+        logout();
+        setError("تم إيقاف حسابك مؤقتاً من قِبل الإدارة. يرجى التواصل مع الدعم لإعادة التفعيل.");
+        return;
+      }
+    } catch {
+      // If the check fails (network error etc.), allow through — the dashboard
+      // overlay will catch the status on next poll.
+    } finally {
+      setCheckingDriverStatus(false);
+    }
+    setLocation("/driver-dashboard");
+  };
 
   // ── Contact modal state ────────────────────────────────────────────────────
   const [showContact, setShowContact] = useState(false);
@@ -81,10 +121,13 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (userId) {
+    // checkingDriverStatus is true while navigateAfterLogin is awaiting the
+    // account-status fetch — skip auto-redirect during that window so a
+    // banned/suspended driver doesn't race through to /driver-dashboard.
+    if (userId && !checkingDriverStatus) {
       setLocation(userType === "سائق" ? "/driver-dashboard" : "/dashboard");
     }
-  }, [userId, userType, setLocation]);
+  }, [userId, userType, setLocation, checkingDriverStatus]);
 
   // ── Login submit ───────────────────────────────────────────────────────────
   const handleSubmit = (e: React.FormEvent) => {
@@ -104,7 +147,7 @@ export default function Login() {
           sessionToken: data.sessionToken,
           refreshToken: data.refreshToken,
         });
-        setLocation(data.userType === "سائق" ? "/driver-dashboard" : "/dashboard");
+        void navigateAfterLogin(data.userId, data.userType);
       },
       onError: (err: any) => {
         if (err?.data?.code === "DEVICE_LIMIT_EXCEEDED" && Array.isArray(err?.data?.devices)) {
@@ -595,7 +638,7 @@ export default function Login() {
                   onClick={() => { setDeviceLimitDevices(null); loginMutation.mutate({ data: { email, password } }, {
                     onSuccess: (data: any) => {
                       setAuth({ userId: data.userId, name: data.name, email: data.email, userType: data.userType, sessionToken: data.sessionToken, refreshToken: data.refreshToken });
-                      setLocation(data.userType === "سائق" ? "/driver-dashboard" : "/dashboard");
+                      void navigateAfterLogin(data.userId, data.userType);
                     },
                     onError: (err: any) => { setError(err?.data?.error || err?.message || t("login.error.credentials")); }
                   }); }}
