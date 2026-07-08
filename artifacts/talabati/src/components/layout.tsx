@@ -31,35 +31,26 @@ export function WaterDropIcon({ className = "" }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-hidden="true"
+      style={{ filter: "drop-shadow(0 0 6px #0ea5e9) drop-shadow(0 0 3px #38bdf8)" }}
     >
       <defs>
-        <linearGradient id="wdFill" x1="12" y1="1" x2="12" y2="31" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stopColor="#7ee8fa"/>
-          <stop offset="55%"  stopColor="#0ea5e9"/>
-          <stop offset="100%" stopColor="#0369a1"/>
+        <linearGradient id="wdStroke" x1="12" y1="1" x2="12" y2="31" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stopColor="#38bdf8"/>
+          <stop offset="100%" stopColor="#0ea5e9"/>
         </linearGradient>
-        <radialGradient id="wdGlow" cx="50%" cy="30%" r="55%">
-          <stop offset="0%"   stopColor="#bae6fd" stopOpacity="0.6"/>
-          <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0"/>
-        </radialGradient>
-        <filter id="wdShadow" x="-40%" y="-20%" width="180%" height="160%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#0369a1" floodOpacity="0.4"/>
-        </filter>
       </defs>
-      {/* Main drop body */}
+      {/* Outline-only drop — transparent interior */}
       <path
-        d="M12 1 C12 1 2 12 2 20 C2 26.6 6.5 31 12 31 C17.5 31 22 26.6 22 20 C22 12 12 1 12 1 Z"
-        fill="url(#wdFill)"
-        filter="url(#wdShadow)"
+        d="M12 2 C12 2 2.5 13 2.5 20.5 C2.5 26.8 6.8 30.5 12 30.5 C17.2 30.5 21.5 26.8 21.5 20.5 C21.5 13 12 2 12 2 Z"
+        stroke="url(#wdStroke)"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+        fill="none"
       />
-      {/* Radial inner glow */}
-      <path
-        d="M12 1 C12 1 2 12 2 20 C2 26.6 6.5 31 12 31 C17.5 31 22 26.6 22 20 C22 12 12 1 12 1 Z"
-        fill="url(#wdGlow)"
-      />
-      {/* Specular highlight */}
-      <ellipse cx="8.5" cy="17" rx="2" ry="4" fill="white" opacity="0.38" transform="rotate(-22 8.5 17)"/>
-      <ellipse cx="10"  cy="12" rx="1" ry="2" fill="white" opacity="0.22" transform="rotate(-22 10 12)"/>
+      {/* Highlight 1 — upper-left, larger */}
+      <ellipse cx="8.4" cy="17" rx="1.5" ry="3.5" fill="white" opacity="0.55" transform="rotate(-22 8.4 17)"/>
+      {/* Highlight 2 — upper-left, smaller accent */}
+      <ellipse cx="9.5" cy="11.5" rx="0.7" ry="1.6" fill="white" opacity="0.32" transform="rotate(-22 9.5 11.5)"/>
     </svg>
   );
 }

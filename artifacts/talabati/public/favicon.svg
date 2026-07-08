@@ -1,46 +1,34 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="dropGrad" x1="90" y1="12" x2="90" y2="168" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#7ee8fa"/>
-      <stop offset="55%"  stop-color="#0ea5e9"/>
-      <stop offset="100%" stop-color="#0369a1"/>
+    <linearGradient id="dropStroke" x1="90" y1="15" x2="90" y2="165" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"  stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
     </linearGradient>
-    <radialGradient id="glowGrad" cx="50%" cy="35%" r="55%">
-      <stop offset="0%"   stop-color="#bae6fd" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="dropShadow" x="-20%" y="-10%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0369a1" flood-opacity="0.45"/>
+    <filter id="glow" x="-40%" y="-30%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
 
-  <!-- Main water-drop body -->
+  <!-- Dark rounded background for legibility on light browser tabs -->
+  <rect width="180" height="180" rx="36" fill="#0a0e1a"/>
+
+  <!-- Outline-only drop (no fill inside) with glow -->
   <path
-    d="M90 12
-       C90 12 32 74 32 112
-       C32 147 58 168 90 168
-       C122 168 148 147 148 112
-       C148 74 90 12 90 12 Z"
-    fill="url(#dropGrad)"
-    filter="url(#dropShadow)"
+    d="M90 20 C90 20 30 80 30 118 C30 152 57 165 90 165 C123 165 150 152 150 118 C150 80 90 20 90 20 Z"
+    stroke="url(#dropStroke)"
+    stroke-width="7"
+    stroke-linejoin="round"
+    fill="none"
+    filter="url(#glow)"
   />
 
-  <!-- Inner radial glow overlay -->
-  <path
-    d="M90 12
-       C90 12 32 74 32 112
-       C32 147 58 168 90 168
-       C122 168 148 147 148 112
-       C148 74 90 12 90 12 Z"
-    fill="url(#glowGrad)"
-  />
-
-  <!-- Specular highlight (teardrop-shaped shine, top-left) -->
-  <ellipse cx="70" cy="82" rx="10" ry="20"
-           fill="white" opacity="0.38"
-           transform="rotate(-28 70 82)"/>
-  <!-- Tiny secondary highlight -->
-  <ellipse cx="79" cy="62" rx="4" ry="7"
-           fill="white" opacity="0.22"
-           transform="rotate(-28 79 62)"/>
+  <!-- Highlight 1 — upper-left, larger -->
+  <ellipse cx="66" cy="108" rx="9" ry="22" fill="white" opacity="0.55" transform="rotate(-22 66 108)"/>
+  <!-- Highlight 2 — upper-left, smaller accent -->
+  <ellipse cx="73" cy="72"  rx="4.5" ry="10" fill="white" opacity="0.32" transform="rotate(-22 73 72)"/>
 </svg>
