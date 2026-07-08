@@ -23,28 +23,43 @@ export function WaterDrops() {
   );
 }
 
-export function WaterTruckIcon({ className = "" }: { className?: string }) {
+export function WaterDropIcon({ className = "" }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 80 48"
+      viewBox="0 0 24 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-hidden="true"
     >
-      <rect x="2" y="18" width="78" height="22" rx="3" fill="currentColor" opacity="0.85" />
-      <rect x="2" y="10" width="22" height="14" rx="2" fill="currentColor" />
-      <rect x="26" y="14" width="16" height="10" rx="2" fill="currentColor" opacity="0.9" />
-      <rect x="44" y="14" width="16" height="10" rx="2" fill="currentColor" opacity="0.9" />
-      <rect x="62" y="14" width="16" height="10" rx="2" fill="currentColor" opacity="0.9" />
-      <rect x="4" y="12" width="18" height="10" rx="1.5" fill="white" opacity="0.25" />
-      <circle cx="14" cy="42" r="5" fill="white" stroke="currentColor" strokeWidth="2" />
-      <circle cx="14" cy="42" r="2" fill="currentColor" />
-      <circle cx="64" cy="42" r="5" fill="white" stroke="currentColor" strokeWidth="2" />
-      <circle cx="64" cy="42" r="2" fill="currentColor" />
-      <circle cx="48" cy="42" r="5" fill="white" stroke="currentColor" strokeWidth="2" />
-      <circle cx="48" cy="42" r="2" fill="currentColor" />
-      <rect x="6" y="20" width="4" height="2" rx="1" fill="white" opacity="0.5" />
+      <defs>
+        <linearGradient id="wdFill" x1="12" y1="1" x2="12" y2="31" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stopColor="#7ee8fa"/>
+          <stop offset="55%"  stopColor="#0ea5e9"/>
+          <stop offset="100%" stopColor="#0369a1"/>
+        </linearGradient>
+        <radialGradient id="wdGlow" cx="50%" cy="30%" r="55%">
+          <stop offset="0%"   stopColor="#bae6fd" stopOpacity="0.6"/>
+          <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0"/>
+        </radialGradient>
+        <filter id="wdShadow" x="-40%" y="-20%" width="180%" height="160%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#0369a1" floodOpacity="0.4"/>
+        </filter>
+      </defs>
+      {/* Main drop body */}
+      <path
+        d="M12 1 C12 1 2 12 2 20 C2 26.6 6.5 31 12 31 C17.5 31 22 26.6 22 20 C22 12 12 1 12 1 Z"
+        fill="url(#wdFill)"
+        filter="url(#wdShadow)"
+      />
+      {/* Radial inner glow */}
+      <path
+        d="M12 1 C12 1 2 12 2 20 C2 26.6 6.5 31 12 31 C17.5 31 22 26.6 22 20 C22 12 12 1 12 1 Z"
+        fill="url(#wdGlow)"
+      />
+      {/* Specular highlight */}
+      <ellipse cx="8.5" cy="17" rx="2" ry="4" fill="white" opacity="0.38" transform="rotate(-22 8.5 17)"/>
+      <ellipse cx="10"  cy="12" rx="1" ry="2" fill="white" opacity="0.22" transform="rotate(-22 10 12)"/>
     </svg>
   );
 }
@@ -165,8 +180,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 glass-panel border-b-0 border-white/20">
         <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              <WaterTruckIcon className="w-7 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <WaterDropIcon className="w-5 h-7" />
             </div>
             <span className="font-bold text-lg text-primary tracking-tight">Mizu</span>
           </div>

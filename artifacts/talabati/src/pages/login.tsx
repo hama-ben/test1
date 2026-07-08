@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLogin, customFetch } from "@workspace/api-client-react";
 import { Mail, Lock, Loader2, ArrowRight, CheckCircle2, Eye, EyeOff, MessageCircle, X, ExternalLink, Smartphone, Trash2 } from "lucide-react";
 import { Link } from "wouter";
-import { WaterDrops, WaterTruckIcon, AuthControls } from "@/components/layout";
+import { WaterDrops, WaterDropIcon, AuthControls } from "@/components/layout";
 import { useTranslation } from "@/lib/i18n";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
@@ -461,8 +461,8 @@ export default function Login() {
       <div className="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-sky-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
       <div className="w-full max-w-sm relative z-10">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-tr from-primary to-cyan-400 rounded-3xl flex items-center justify-center shadow-lg shadow-primary/30 mb-6 rotate-3 opacity-[0.74] text-[color:var(--color-sky-800)]">
-            <WaterTruckIcon className="w-12 h-8 text-white -rotate-3" />
+          <div className="mb-6 flex items-center justify-center">
+            <WaterDropIcon className="w-16 h-20 drop-shadow-[0_0_18px_rgba(14,165,233,0.55)]" />
           </div>
           <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-1">{t("login.title")}</h1>
           <p className="text-sm font-medium text-primary mb-1">{t("login.tagline")}</p>
