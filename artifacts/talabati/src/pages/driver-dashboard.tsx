@@ -1261,9 +1261,12 @@ function PendingOrdersQueue({ driverId }: { driverId: string }) {
         )}
 
         {!orders || orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-slate-400 glass-panel rounded-3xl">
-            <Package className="w-14 h-14 mb-4 opacity-40" />
-            <p className="text-base">لا توجد طلبات معلقة حالياً</p>
+          <div className="flex flex-col items-center justify-center py-14 text-slate-400 glass-panel rounded-3xl gap-1">
+            <Package className="w-14 h-14 mb-3 opacity-40" />
+            <p className="text-base font-medium text-slate-500 dark:text-slate-400">لا توجد طلبات معلقة حالياً</p>
+            <p className="text-sm text-slate-400 dark:text-slate-500 text-center px-6 mt-1 leading-relaxed">
+              تأكد أنك بحالة "حاضر" لتصلك الطلبات فور توفرها
+            </p>
           </div>
         ) : (
           orders.map(order => (

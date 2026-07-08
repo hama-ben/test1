@@ -177,9 +177,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <span className="font-bold text-lg text-primary tracking-tight">Mizu</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <LanguageCycleButton />
             <ThemeToggleButton />
+
+            {name && (
+              <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 shrink-0" />
+            )}
 
             {name && (
               <>

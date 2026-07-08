@@ -149,7 +149,7 @@ function ProfileContent() {
       {userType === "سائق" && (
         <div className="glass-panel rounded-3xl p-6 border border-amber-200 dark:border-amber-700/40">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-full flex items-center justify-center">
               <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
             </div>
             <div>
@@ -221,8 +221,8 @@ function ProfileContent() {
       {/* Password change card */}
       <div className="glass-panel rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-xl flex items-center justify-center">
-            <Lock className="w-5 h-5 text-amber-600" />
+          <div className="w-10 h-10 bg-primary/8 dark:bg-primary/12 rounded-full flex items-center justify-center">
+            <Lock className="w-5 h-5 text-primary" />
           </div>
           <div>
             <h2 className="font-bold text-slate-800 dark:text-white">تغيير كلمة المرور</h2>
@@ -287,8 +287,8 @@ function ProfileContent() {
       {/* ── Feature 5: Customer service ──────────────────────────────────── */}
       <div className="glass-panel rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-sky-50 dark:bg-sky-900/20 rounded-xl flex items-center justify-center">
-            <HeadphonesIcon className="w-5 h-5 text-sky-600" />
+          <div className="w-10 h-10 bg-primary/8 dark:bg-primary/12 rounded-full flex items-center justify-center">
+            <HeadphonesIcon className="w-5 h-5 text-primary" />
           </div>
           <div>
             <h2 className="font-bold text-slate-800 dark:text-white">خدمة العملاء</h2>

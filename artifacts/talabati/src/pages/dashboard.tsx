@@ -252,8 +252,16 @@ function RatingModal({ orderId, raterUserId, ratedUserId, raterType, ratedName, 
 
 function MenuView({ onSelect }: { onSelect: (view: View) => void }) {
   const { t } = useTranslation();
+  const { name } = useAuth();
   return (
-    <div className="flex flex-col gap-5 mt-10">
+    <div className="flex flex-col gap-5 mt-6">
+      {/* Personal greeting */}
+      <div className="text-center pb-2">
+        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
+          أهلاً{name ? `، ${name}` : ""} 👋
+        </h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">ماذا تريد اليوم؟</p>
+      </div>
       <button onClick={() => onSelect("new-order")} className="bubble-card p-8 flex flex-col items-center justify-center gap-4 group" data-testid="button-nav-new-order">
         <div className="w-20 h-20 bg-gradient-to-tr from-sky-400 to-primary rounded-full flex items-center justify-center shadow-lg shadow-sky-400/40 group-hover:scale-110 transition-transform duration-300">
           <ShoppingBag className="w-10 h-10 text-white" />
