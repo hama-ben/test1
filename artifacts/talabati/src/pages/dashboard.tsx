@@ -253,20 +253,24 @@ function RatingModal({ orderId, raterUserId, ratedUserId, raterType, ratedName, 
 function MenuView({ onSelect }: { onSelect: (view: View) => void }) {
   const { t } = useTranslation();
   return (
-    <div className="flex flex-col gap-6 mt-8">
+    <div className="flex flex-col gap-5 mt-10">
       <button onClick={() => onSelect("new-order")} className="bubble-card p-8 flex flex-col items-center justify-center gap-4 group" data-testid="button-nav-new-order">
         <div className="w-20 h-20 bg-gradient-to-tr from-sky-400 to-primary rounded-full flex items-center justify-center shadow-lg shadow-sky-400/40 group-hover:scale-110 transition-transform duration-300">
           <ShoppingBag className="w-10 h-10 text-white" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-white">{t("dashboard.newOrder")}</h2>
-        <p className="text-slate-500 text-center max-w-[200px]">{t("dashboard.newOrderDesc")}</p>
+        <div className="flex flex-col items-center gap-1.5">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-white">{t("dashboard.newOrder")}</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm text-center max-w-[200px] leading-relaxed">{t("dashboard.newOrderDesc")}</p>
+        </div>
       </button>
       <button onClick={() => onSelect("my-orders")} className="bubble-card p-8 flex flex-col items-center justify-center gap-4 group" data-testid="button-nav-my-orders">
         <div className="w-20 h-20 bg-gradient-to-tr from-teal-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-teal-400/40 group-hover:scale-110 transition-transform duration-300">
           <ListOrdered className="w-10 h-10 text-white" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-white">{t("dashboard.myOrders")}</h2>
-        <p className="text-slate-500 text-center max-w-[200px]">{t("dashboard.myOrdersDesc")}</p>
+        <div className="flex flex-col items-center gap-1.5">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-white">{t("dashboard.myOrders")}</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm text-center max-w-[200px] leading-relaxed">{t("dashboard.myOrdersDesc")}</p>
+        </div>
       </button>
     </div>
   );

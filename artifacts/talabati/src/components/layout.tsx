@@ -68,7 +68,7 @@ function LanguageCycleButton() {
     <button
       onClick={cycleLocale}
       title={`Language: ${locale.toUpperCase()}`}
-      className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-colors text-base leading-none select-none"
+      className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 text-base leading-none select-none"
       aria-label="Switch language"
     >
       {LOCALE_FLAGS[locale]}
@@ -84,7 +84,7 @@ function ThemeToggleButton() {
     <button
       onClick={toggleTheme}
       title={theme === "dark" ? t("theme.light") : t("theme.dark")}
-      className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-colors text-slate-600 dark:text-slate-300"
+      className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 text-slate-600 dark:text-slate-300"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -171,7 +171,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 glass-panel border-b-0 border-white/20">
         <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-primary/10 hover:bg-primary/18 flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-default">
               <WaterDropIcon className="w-5 h-7" />
             </div>
             <span className="font-bold text-lg text-primary tracking-tight">Mizu</span>
@@ -190,7 +190,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 {/* Support chat button */}
                 <button
                   onClick={handleSupportOpen}
-                  className="relative w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-colors text-slate-600 dark:text-slate-300"
+                  className="relative w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 text-slate-600 dark:text-slate-300"
                   title="الدعم الفني"
                   aria-label="الدعم الفني"
                 >
@@ -203,7 +203,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 {/* Announcements bell — visible to all logged-in users */}
                 <button
                   onClick={handleBellClick}
-                  className="relative w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-colors text-slate-600 dark:text-slate-300"
+                  className="relative w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 text-slate-600 dark:text-slate-300"
                   title="الإعلانات"
                   aria-label="الإعلانات"
                 >
@@ -219,7 +219,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
                 <button
                   onClick={() => setLocation("/profile")}
-                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-colors text-slate-600 dark:text-slate-300"
+                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 text-slate-600 dark:text-slate-300"
                   title="الملف الشخصي"
                   data-testid="button-profile"
                 >
@@ -227,7 +227,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-colors text-slate-600 dark:text-slate-300"
+                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 text-slate-600 dark:text-slate-300"
                   data-testid="button-logout"
                   title={t("nav.logout")}
                 >

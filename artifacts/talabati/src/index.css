@@ -99,14 +99,14 @@
   --app-font-serif: Georgia, serif;
   --app-font-mono: Menlo, monospace;
   --radius: 1rem;
-  --shadow-2xs: 0px 2px 0px 0px hsl(202 89% 53% / 0.00);
-  --shadow-xs: 0px 2px 0px 0px hsl(202 89% 53% / 0.00);
-  --shadow-sm: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 1px 2px -1px hsl(202 89% 53% / 0.00);
-  --shadow: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 1px 2px -1px hsl(202 89% 53% / 0.00);
-  --shadow-md: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 2px 4px -1px hsl(202 89% 53% / 0.00);
-  --shadow-lg: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 4px 6px -1px hsl(202 89% 53% / 0.00);
-  --shadow-xl: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 8px 10px -1px hsl(202 89% 53% / 0.00);
-  --shadow-2xl: 0px 2px 0px 0px hsl(202 89% 53% / 0.00);
+  --shadow-2xs: 0px 1px 2px hsl(210 40% 30% / 0.08);
+  --shadow-xs: 0px 1px 3px hsl(210 40% 30% / 0.10), 0px 1px 2px hsl(210 40% 30% / 0.06);
+  --shadow-sm: 0px 2px 5px hsl(210 40% 30% / 0.10), 0px 1px 2px hsl(210 40% 30% / 0.07);
+  --shadow: 0px 4px 8px hsl(210 40% 30% / 0.10), 0px 2px 4px hsl(210 40% 30% / 0.07);
+  --shadow-md: 0px 6px 14px hsl(210 40% 30% / 0.12), 0px 3px 6px hsl(210 40% 30% / 0.08);
+  --shadow-lg: 0px 10px 24px hsl(210 40% 30% / 0.14), 0px 4px 8px hsl(210 40% 30% / 0.10);
+  --shadow-xl: 0px 20px 40px hsl(210 40% 30% / 0.16), 0px 8px 16px hsl(210 40% 30% / 0.12);
+  --shadow-2xl: 0px 25px 50px hsl(210 40% 30% / 0.20);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
   --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
@@ -146,7 +146,7 @@
   --secondary: 215 40% 20%;
   --secondary-foreground: 200 60% 95%;
   --muted: 215 30% 15%;
-  --muted-foreground: 210 20% 65%;
+  --muted-foreground: 210 20% 68%;
   --accent: 190 90% 50%;
   --accent-foreground: 210 90% 20%;
   --destructive: 0 84% 60%;
@@ -158,18 +158,22 @@
   --chart-3: 210 90% 60%;
   --chart-4: 180 80% 60%;
   --chart-5: 220 80% 60%;
-  --shadow-2xs: 0px 2px 0px 0px hsl(202 89% 53% / 0.00);
-  --shadow-xs: 0px 2px 0px 0px hsl(202 89% 53% / 0.00);
-  --shadow-sm: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 1px 2px -1px hsl(202 89% 53% / 0.00);
-  --shadow: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 1px 2px -1px hsl(202 89% 53% / 0.00);
-  --shadow-md: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 2px 4px -1px hsl(202 89% 53% / 0.00);
-  --shadow-lg: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 4px 6px -1px hsl(202 89% 53% / 0.00);
-  --shadow-xl: 0px 2px 0px 0px hsl(202 89% 53% / 0.00), 0px 8px 10px -1px hsl(202 89% 53% / 0.00);
-  --shadow-2xl: 0px 2px 0px 0px hsl(202 89% 53% / 0.00);
+  --shadow-2xs: 0px 1px 2px hsl(0 0% 0% / 0.30);
+  --shadow-xs: 0px 1px 3px hsl(0 0% 0% / 0.36), 0px 1px 2px hsl(0 0% 0% / 0.26);
+  --shadow-sm: 0px 2px 5px hsl(0 0% 0% / 0.40), 0px 1px 2px hsl(0 0% 0% / 0.30);
+  --shadow: 0px 4px 8px hsl(0 0% 0% / 0.46), 0px 2px 4px hsl(0 0% 0% / 0.34);
+  --shadow-md: 0px 6px 14px hsl(0 0% 0% / 0.50), 0px 3px 6px hsl(0 0% 0% / 0.38);
+  --shadow-lg: 0px 10px 24px hsl(0 0% 0% / 0.54), 0px 4px 8px hsl(0 0% 0% / 0.42);
+  --shadow-xl: 0px 20px 40px hsl(0 0% 0% / 0.58), 0px 8px 16px hsl(0 0% 0% / 0.46);
+  --shadow-2xl: 0px 25px 50px hsl(0 0% 0% / 0.64);
 }
 
 @layer base {
   * { @apply border-border; }
+  /* Global smooth transitions for all interactive elements */
+  button, [role="button"], a {
+    @apply transition-[color,background-color,border-color,transform,opacity,box-shadow] duration-200;
+  }
   body {
     @apply font-sans antialiased text-foreground;
     background: linear-gradient(135deg, hsl(190 80% 95%), hsl(210 60% 98%));
@@ -234,11 +238,11 @@
 }
 
 .glass-panel {
-  @apply bg-white/70 dark:bg-black/40 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg;
+  @apply bg-white/72 dark:bg-slate-950/55 backdrop-blur-xl border border-white/40 dark:border-white/[0.12] shadow-md;
 }
 
 .bubble-card {
-  @apply bg-white/80 dark:bg-black/50 backdrop-blur-md rounded-3xl border border-white/50 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:bg-white dark:hover:bg-black/60;
+  @apply bg-white/80 dark:bg-slate-900/70 backdrop-blur-md rounded-3xl border border-white/50 dark:border-white/[0.08] shadow-md transition-all duration-200 hover:shadow-xl hover:-translate-y-1.5 hover:bg-white dark:hover:bg-slate-900/90;
 }
 
 @layer utilities {

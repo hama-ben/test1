@@ -547,17 +547,17 @@ function SummaryStats() {
   if (!summary) return null;
   return (
     <div className="grid grid-cols-3 gap-3">
-      <div className="glass-panel p-3 flex flex-col items-center rounded-2xl">
-        <span className="text-xs text-slate-500 font-medium">{t("driver.stats.total")}</span>
-        <span className="text-xl font-bold text-slate-800 dark:text-white">{summary.total}</span>
+      <div className="glass-panel pt-3 pb-4 px-2 flex flex-col items-center rounded-2xl gap-0.5 border-t-2 border-slate-300/50 dark:border-slate-600/50">
+        <span className="text-2xl font-black text-slate-800 dark:text-white tabular-nums leading-tight">{summary.total}</span>
+        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold text-center leading-tight">{t("driver.stats.total")}</span>
       </div>
-      <div className="glass-panel p-3 flex flex-col items-center rounded-2xl bg-amber-50/50 dark:bg-amber-900/10">
-        <span className="text-xs text-amber-600 font-medium">{t("driver.stats.inDelivery")}</span>
-        <span className="text-xl font-bold text-amber-700">{summary.inDelivery}</span>
+      <div className="glass-panel pt-3 pb-4 px-2 flex flex-col items-center rounded-2xl gap-0.5 border-t-2 border-amber-400/70 bg-amber-50/40 dark:bg-amber-900/10">
+        <span className="text-2xl font-black text-amber-600 dark:text-amber-400 tabular-nums leading-tight">{summary.inDelivery}</span>
+        <span className="text-[11px] text-amber-600/90 dark:text-amber-400/80 font-semibold text-center leading-tight">{t("driver.stats.inDelivery")}</span>
       </div>
-      <div className="glass-panel p-3 flex flex-col items-center rounded-2xl bg-emerald-50/50 dark:bg-emerald-900/10">
-        <span className="text-xs text-emerald-600 font-medium">{t("driver.stats.completed")}</span>
-        <span className="text-xl font-bold text-emerald-700">{summary.delivered}</span>
+      <div className="glass-panel pt-3 pb-4 px-2 flex flex-col items-center rounded-2xl gap-0.5 border-t-2 border-emerald-400/70 bg-emerald-50/40 dark:bg-emerald-900/10">
+        <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 tabular-nums leading-tight">{summary.delivered}</span>
+        <span className="text-[11px] text-emerald-600/90 dark:text-emerald-400/80 font-semibold text-center leading-tight">{t("driver.stats.completed")}</span>
       </div>
     </div>
   );
