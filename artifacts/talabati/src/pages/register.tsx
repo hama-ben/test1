@@ -13,6 +13,7 @@ import {
 import { Link } from "wouter";
 import { WILAYAS } from "@/data/algeria";
 import { uploadDriverFile } from "@/lib/supabase";
+import { compressImage } from "@/lib/compress-image";
 import { WaterDrops, AuthControls } from "@/components/layout";
 import { useTranslation } from "@/lib/i18n";
 

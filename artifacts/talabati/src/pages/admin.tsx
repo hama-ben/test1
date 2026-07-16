@@ -286,6 +286,8 @@ function PaymentsPanel({ adminKey }: { adminKey: string }) {
                     src={p.receiptImage}
                     alt="وصل الدفع"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                   />
                 </div>

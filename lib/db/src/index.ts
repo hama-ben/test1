@@ -20,8 +20,11 @@ if (!rawUrl) {
 // Always SSL for Supabase — rejectUnauthorized:false is intentional
 // (TLS tunnel enforced by the connection string; we need encryption, not cert pinning).
 export const pool = new Pool({
-  connectionString: rawUrl,
-  ssl: { rejectUnauthorized: false },
+  connectionString:      rawUrl,
+  ssl:                   { rejectUnauthorized: false },
+  max:                   20,    // max open connections (default was 10)
+  idleTimeoutMillis:     30_000, // close idle connections after 30 s
+  connectionTimeoutMillis: 5_000, // throw if a connection can't be acquired in 5 s
 });
 
 export const db = drizzle(pool, { schema });
